@@ -1,0 +1,127 @@
+<div class="min-h-screen bg-gray-50 pb-24">
+  @if (tour(); as currentTour) {
+    <!-- Hero Image Section -->
+    <div class="relative h-[50vh] md:h-[65vh] w-full overflow-hidden">
+      <img [src]="currentTour.image" [alt]="currentTour.title" class="w-full h-full object-cover scale-105 hover:scale-100 transition-transform duration-[2000ms]">
+      <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent"></div>
+      
+      <div class="absolute bottom-8 left-0 w-full px-6">
+        <div class="max-w-6xl mx-auto">
+          <div class="inline-block mb-4">
+             <app-urgency-badge [initialViewers]="currentTour.viewingCount"></app-urgency-badge>
+          </div>
+          <h1 class="text-4xl md:text-6xl font-black text-white leading-tight drop-shadow-lg">{{ currentTour.title }}</h1>
+          <div class="flex items-center gap-3 mt-4 text-white/90">
+             <span class="flex items-center gap-1 bg-white/20 backdrop-blur-md px-3 py-1 rounded-lg text-sm">
+               <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path></svg>
+               {{ currentTour.destination }}
+             </span>
+             <span class="flex items-center gap-1 bg-white/20 backdrop-blur-md px-3 py-1 rounded-lg text-sm capitalize">
+               {{ currentTour.style }}
+             </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="max-w-6xl mx-auto px-6 py-12 grid grid-cols-1 lg:grid-cols-3 gap-12">
+      <!-- Main Content -->
+      <div class="lg:col-span-2 space-y-12">
+        <section class="fade-in-up">
+          <h2 class="text-3xl font-bold text-gray-900 border-b-2 border-blue-600/10 pb-4 mb-6">The Experience</h2>
+          <p class="text-gray-600 text-lg leading-relaxed text-balance">{{ currentTour.description }}</p>
+        </section>
+
+        <!-- Itinerary Section -->
+        <section class="fade-in-up" style="animation-delay: 0.1s">
+          <h2 class="text-3xl font-bold text-gray-900 border-b-2 border-blue-600/10 pb-4 mb-8 text-balance">The Day-by-Day Journey</h2>
+          <div class="space-y-6">
+            @for (item of currentTour.itinerary; track item.day) {
+              <div class="group border border-gray-100 rounded-3xl overflow-hidden glass hover:shadow-2xl hover:shadow-blue-500/5 transition-all duration-500">
+                <button class="w-full flex items-center justify-between p-8 text-left" (click)="toggleDay(item.day)">
+                  <div class="flex items-center gap-6">
+                    <div class="flex flex-col items-center justify-center w-14 h-14 bg-gradient-to-br from-blue-600 to-indigo-700 text-white rounded-2xl shadow-lg shadow-blue-200">
+                      <span class="text-[10px] uppercase font-black opacity-70 leading-none mb-1">Day</span>
+                      <span class="text-xl font-bold leading-none">{{ item.day }}</span>
+                    </div>
+                    <span class="text-xl font-bold text-gray-800 tracking-tight">{{ item.title }}</span>
+                  </div>
+                  <div class="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center group-hover:bg-blue-50 transition-colors">
+                    <svg class="w-5 h-5 text-gray-400 group-hover:text-blue-600 transition-all" [class.rotate-180]="expandedDay() === item.day" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                  </div>
+                </button>
+                @if (expandedDay() === item.day) {
+                  <div class="px-8 pb-8 text-gray-600 text-lg border-t border-gray-50 bg-gray-50/30 animate-fade-in-up">
+                    <div class="pt-6">
+                      {{ item.content }}
+                    </div>
+                  </div>
+                }
+              </div>
+            }
+          </div>
+        </section>
+      </div>
+
+      <!-- Sticky Sidebar -->
+      <div class="lg:col-span-1">
+        <div class="sticky top-8 space-y-6">
+          <div class="glass p-10 rounded-[2.5rem] shadow-2xl border-white relative overflow-hidden">
+            <!-- Glass highlight -->
+            <div class="absolute -top-12 -right-12 w-24 h-24 bg-blue-400/10 blur-3xl rounded-full"></div>
+            
+            <div class="relative z-10">
+              <div class="text-xs font-black text-blue-600 uppercase tracking-[0.2em] mb-2">Special Group Rate</div>
+              <div class="flex items-baseline gap-2 mb-8">
+                <span class="text-5xl font-black text-gray-900 tracking-tighter">${{ currentTour.price }}</span>
+                <span class="text-sm font-bold text-gray-400">/ person</span>
+              </div>
+              
+              <div class="space-y-5 mb-10">
+                <div class="flex items-center justify-between text-sm group">
+                  <span class="text-gray-500 font-medium group-hover:text-gray-900 transition-colors">Duration</span>
+                  <span class="font-bold text-gray-900 bg-gray-100 px-3 py-1 rounded-full">{{ currentTour.itinerary.length }} Days</span>
+                </div>
+                <div class="flex items-center justify-between text-sm group">
+                  <span class="text-gray-500 font-medium group-hover:text-gray-900 transition-colors">Availability</span>
+                  <div class="flex flex-col items-end">
+                    <span class="font-black text-red-600 animate-pulse">{{ currentTour.seatsLeft }} seats left!</span>
+                    <span class="text-[10px] text-gray-400">Highly In Demand</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="bg-gray-50/50 p-6 rounded-22xl mb-8 border border-white">
+                <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest text-center mb-3">Price expires in</p>
+                <app-countdown-timer></app-countdown-timer>
+              </div>
+
+              <a [href]="whatsappService.generateLink(currentTour.title, currentTour.price)" 
+                 target="_blank"
+                 class="btn-whatsapp w-full flex justify-center items-center gap-3 py-5 text-xl font-bold rounded-22xl shadow-green-200">
+                 <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.246 2.248 3.484 5.232 3.484 8.412-.003 6.557-5.338 11.892-11.893 11.892-1.997-.001-3.951-.5-5.688-1.448l-6.309 1.656zm6.222-4.032c1.504.893 2.909 1.33 4.595 1.331 5.287 0 9.589-4.301 9.591-9.589.001-2.564-.998-4.973-2.813-6.789s-4.225-2.815-6.79-2.815c-5.286 0-9.59 4.302-9.591 9.591 0 1.921.559 3.477 1.547 4.907l-.997 3.641 3.73-.978zm11.758-7.033c-.083-.139-.304-.222-.637-.388s-1.968-.971-2.273-1.082-.526-.166-.747.166-.857 1.082-1.051 1.303-.388.249-.72.083c-.332-.166-1.4-.516-2.667-1.645-1.033-.921-1.73-2.06-1.936-2.433-.207-.374-.022-.575.144-.741s.332-.388.498-.581.221-.277.332-.47c.11-.194.055-.36-.027-.526s-.748-1.802-1.025-2.466c-.269-.646-.541-.559-.747-.57l-.637-.012c-.221 0-.58.083-.884.415s-1.161 1.135-1.161 2.769 1.189 3.212 1.355 3.434c.166.221 2.34 3.573 5.669 5.008.791.341 1.41.545 1.894.699.794.252 1.517.217 2.088.131.637-.097 1.968-.803 2.244-1.579s.277-1.44.194-1.579z"/></svg>
+                 Book via WhatsApp
+              </a>
+              
+              <div class="mt-6 flex items-center justify-center gap-2">
+                <div class="flex -space-x-2">
+                  <div class="w-6 h-6 rounded-full bg-gray-200 border-2 border-white"></div>
+                  <div class="w-6 h-6 rounded-full bg-gray-300 border-2 border-white"></div>
+                  <div class="w-6 h-6 rounded-full bg-gray-400 border-2 border-white"></div>
+                </div>
+                <span class="text-[10px] font-bold text-gray-500">+124 travelers booked recently</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  } @else {
+    <div class="flex flex-col items-center justify-center min-h-[60vh] gap-4">
+      <div class="animate-spin rounded-full h-16 w-16 border-4 border-blue-600 border-t-transparent"></div>
+      <p class="text-blue-600 font-black uppercase tracking-widest text-xs animate-pulse">Loading Your Adventure...</p>
+    </div>
+  }
+</div>

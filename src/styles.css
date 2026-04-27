@@ -1,1 +1,47 @@
-/* You can add global styles to this file, and also import other style files */
+@import "tailwindcss";
+
+/* Basic Reset & Debug */
+body {
+  background-color: #f8fafc !important;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+}
+
+/* 
+  If Tailwind is NOT loading, these plain CSS classes 
+  will at least provide some structure.
+*/
+
+.glass {
+  background-color: rgba(255, 255, 255, 0.8) !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(0, 0, 0, 0.1) !important;
+}
+
+.btn-primary {
+  background-color: #2563eb !important;
+  color: white !important;
+  padding: 12px 24px !important;
+  border-radius: 12px !important;
+  font-weight: bold !important;
+  display: inline-block !important;
+  text-decoration: none !important;
+}
+
+.btn-whatsapp {
+  background-color: #22c55e !important;
+  color: white !important;
+  padding: 12px 24px !important;
+  border-radius: 12px !important;
+  font-weight: bold !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+
+/* Fade animation fallback */
+.fade-in-up {
+  opacity: 1 !important; /* Force visible for now */
+}
