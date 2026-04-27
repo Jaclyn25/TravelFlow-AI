@@ -1,22 +1,36 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, signal, computed } from '@angular/core';
+
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+  avatar?: string;
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  // Simple signal-based auth state
-  currentUser = signal<{ name: string; email: string } | null>(null);
+  // Signal-based state
+  private currentUser = signal<User | null>(null);
+  
+  // Public computed signals
+  user = computed(() => this.currentUser());
+  isAuthenticated = computed(() => !!this.currentUser());
 
-  login(name: string, email: string) {
-    this.currentUser.set({ name, email });
-    console.log('[Auth] User logged in:', name);
+  login(email: string, pass: string) {
+    // Simulate API call
+    setTimeout(() => {
+      this.currentUser.set({
+        id: '1',
+        name: 'Traveler One',
+        email: email,
+        avatar: 'https://i.pravatar.cc/150?u=1'
+      });
+    }, 1000);
   }
 
   logout() {
     this.currentUser.set(null);
-  }
-
-  isLoggedIn() {
-    return !!this.currentUser();
   }
 }
