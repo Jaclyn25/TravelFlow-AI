@@ -9,9 +9,11 @@ module.exports = {
       colors: {
         navy: {
           900: '#0F172A',
+          800: '#1E293B',
         },
-        teal: {
-          600: '#0D9488',
+        accent: {
+          DEFAULT: '#DEFF9A',
+          hover: '#CDFF66',
         },
         orange: {
           500: '#F59E0B',
