@@ -1,47 +1,75 @@
 @import "tailwindcss";
 
-/* Basic Reset & Debug */
+/* Typography: Inter is standard for modern clean UI */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+@theme {
+  /* Requested Color Palette */
+  --color-navy-900: #0F172A;
+  --color-teal-600: #0D9488;
+  --color-orange-500: #F59E0B;
+
+  /* Custom Animations */
+  --animate-fade-in-up: fadeInUp 0.6s ease-out forwards;
+  --animate-pulse-whatsapp: pulseWhatsApp 2s infinite;
+
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes pulseWhatsApp {
+    0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4); }
+    70% { box-shadow: 0 0 0 10px rgba(34, 197, 94, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+  }
+}
+
+/* Global Base Styles */
 body {
-  background-color: #f8fafc !important;
-  margin: 0;
-  padding: 0;
-  min-height: 100vh;
+  @apply bg-slate-50 text-slate-900;
+  font-family: 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* 
-  If Tailwind is NOT loading, these plain CSS classes 
-  will at least provide some structure.
-*/
+/* Premium UI Utility Classes */
+@layer components {
+  .glass {
+    @apply bg-white/70 backdrop-blur-xl border border-white/20 shadow-sm;
+  }
+  
+  .glass-dark {
+    @apply bg-navy-900/40 backdrop-blur-xl border border-white/10 shadow-lg;
+  }
 
-.glass {
-  background-color: rgba(255, 255, 255, 0.8) !important;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(0, 0, 0, 0.1) !important;
+  .btn-primary {
+    @apply bg-teal-600 hover:bg-teal-700 text-white font-semibold py-3 px-6 rounded-2xl transition-all duration-300 transform active:scale-95 shadow-lg shadow-teal-100 flex items-center justify-center gap-2;
+  }
+
+  .btn-accent {
+    @apply bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-6 rounded-2xl transition-all duration-300 transform active:scale-95 shadow-lg shadow-orange-100;
+  }
+
+  .btn-whatsapp {
+    @apply bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-2xl shadow-xl flex items-center gap-2 transition-all duration-300 animate-pulse-whatsapp;
+  }
+  
+  .card-bento {
+    @apply rounded-3xl overflow-hidden relative transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl bg-white border border-slate-100;
+  }
+
+  .badge-urgency {
+    @apply bg-orange-500 text-white text-[10px] font-black px-2.5 py-1 rounded-full uppercase tracking-tighter animate-pulse;
+  }
 }
 
-.btn-primary {
-  background-color: #2563eb !important;
-  color: white !important;
-  padding: 12px 24px !important;
-  border-radius: 12px !important;
-  font-weight: bold !important;
-  display: inline-block !important;
-  text-decoration: none !important;
-}
-
-.btn-whatsapp {
-  background-color: #22c55e !important;
-  color: white !important;
-  padding: 12px 24px !important;
-  border-radius: 12px !important;
-  font-weight: bold !important;
-  display: flex !important;
-  align-items: center !important;
-  gap: 8px !important;
-}
-
-/* Fade animation fallback */
-.fade-in-up {
-  opacity: 1 !important; /* Force visible for now */
+/* Extra Helper Utilities */
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
 }

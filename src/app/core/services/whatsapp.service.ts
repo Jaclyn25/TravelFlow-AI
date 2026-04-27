@@ -4,33 +4,19 @@ import { Injectable, signal } from '@angular/core';
   providedIn: 'root'
 })
 export class WhatsAppService {
-  // Configurable WhatsApp number
-  private readonly phoneNumber = signal('1234567890'); // Replace with actual number
+  private readonly phoneNumber = signal<string>('+201234567890'); // Agency Phone
 
   /**
-   * Generates a deep link to WhatsApp with a pre-filled message.
-   * @param tourTitle The title of the tour being discussed.
-   * @param price The current price of the tour.
-   * @returns A WhatsApp deep link URL.
+   * Generates a dynamic WhatsApp deep link for a specific tour.
+   * @param tourName The name of the tour.
+   * @param price The tour price.
    */
-  generateLink(tourTitle: string, price: number): string {
-    const today = new Date().toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    });
-    
-    const message = `Booking Inquiry: ${tourTitle}\nPrice: $${price}\nDate: ${today}\n\nHi! I'm interested in this tour. Is it still available?`;
-    const encodedMessage = encodeURIComponent(message);
-    
-    return `https://wa.me/${this.phoneNumber()}?text=${encodedMessage}`;
+  generateLink(tourName: string, price: number): string {
+    const message = `Hi! I am interested in ${tourName} for $${price}. Can I get more details?`;
+    return `https://wa.me/${this.phoneNumber()}?text=${encodeURIComponent(message)}`;
   }
 
-  /**
-   * Updates the phone number if needed (e.g., from a configuration service).
-   * @param newNumber The new WhatsApp number.
-   */
-  updatePhoneNumber(newNumber: string): void {
+  updatePhoneNumber(newNumber: string) {
     this.phoneNumber.set(newNumber);
   }
 }
