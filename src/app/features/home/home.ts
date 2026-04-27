@@ -26,13 +26,13 @@ import { SkeletonLoaderComponent } from '../../shared/components/skeleton-loader
                 Premium Travel Experience
               </span>
               <h1 class="text-6xl md:text-8xl font-black text-white tracking-tighter leading-[0.9] mb-8">
-                Your Next <br><span class="text-teal-400">Great Adventure</span> Starts Here.
+                Your Next <br><span class="text-accent underline decoration-8 underline-offset-[12px]">Great Adventure</span> Starts Here.
               </h1>
-              <p class="text-xl text-slate-200 font-medium max-w-lg leading-relaxed mb-10 text-balance italic border-l-4 border-teal-600 pl-6">
+              <p class="text-xl text-slate-200 font-medium max-w-lg leading-relaxed mb-10 text-balance italic border-l-4 border-accent pl-6">
                 "Escape the ordinary with AI-tailored journeys to the most exclusive corners of our planet."
               </p>
             <div class="flex items-center gap-6 mb-12">
-              <button class="btn-primary px-10 py-5">View Destinations</button>
+              <button routerLink="/destinations" class="btn-primary px-10 py-5">View Destinations</button>
               <div class="hidden md:flex flex-col">
                 <div class="flex -space-x-3 mb-2">
                   <img src="https://i.pravatar.cc/150?u=1" class="w-10 h-10 rounded-full border-2 border-white shadow-lg">
@@ -46,7 +46,7 @@ import { SkeletonLoaderComponent } from '../../shared/components/skeleton-loader
             <!-- Destination Suggestions (Chips) -->
             <div class="flex flex-wrap gap-3">
                @for (city of ['Bali', 'Santorini', 'Kyoto', 'Marrakech']; track city) {
-                 <span class="px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/10 text-[10px] font-black text-white uppercase tracking-widest hover:bg-teal-600 transition-colors cursor-pointer">{{ city }}</span>
+                 <span class="px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/10 text-[10px] font-black text-white uppercase tracking-widest hover:bg-accent hover:text-navy-900 transition-all cursor-pointer">{{ city }}</span>
                }
             </div>
             </div>
@@ -63,10 +63,10 @@ import { SkeletonLoaderComponent } from '../../shared/components/skeleton-loader
       <section class="max-w-7xl mx-auto px-6 py-32">
         <div class="flex flex-col md:flex-row justify-between items-end gap-6 mb-16 px-2">
           <div>
-            <h2 class="text-5xl font-black text-navy-900 dark:text-white tracking-tighter uppercase">Explore Tours</h2>
-            <p class="text-slate-400 font-bold mt-3 text-lg">Our AI-Curated Masterpieces for 2026</p>
+            <h2 class="text-5xl font-black text-navy-900 dark:text-white tracking-tighter uppercase">Explore <span class="text-accent underline">Bespoke</span> Tours</h2>
+            <p class="text-slate-400 font-bold mt-3 text-lg tracking-tight">Our AI-Curated Masterpieces for 2026</p>
           </div>
-          <button class="bg-white dark:bg-slate-800 border-2 border-slate-100 dark:border-white/5 px-10 py-4 rounded-2xl text-xs font-black uppercase tracking-widest hover:border-teal-600 hover:text-teal-600 transition-all shadow-sm dark:text-slate-400">
+          <button routerLink="/archive" class="bg-white dark:bg-slate-800 border-2 border-slate-100 dark:border-white/5 px-10 py-4 rounded-2xl text-xs font-black uppercase tracking-widest hover:border-accent hover:text-accent transition-all shadow-sm dark:text-slate-400">
              Browse All Tours
           </button>
         </div>
@@ -82,21 +82,21 @@ import { SkeletonLoaderComponent } from '../../shared/components/skeleton-loader
             }
           } @else {
             @for (tour of tours(); track tour.id; let i = $index) {
-              <div class="card-bento group cursor-pointer h-[450px] relative" (click)="navigate(tour.id)">
+              <div class="card-bento group cursor-pointer h-[450px] relative rounded-[3rem] overflow-hidden shadow-2xl transition-all duration-700 hover:-translate-y-4 shadow-navy-900/10 dark:shadow-black" (click)="navigate(tour.id)">
                 <img [src]="tour.image" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-[2000ms]">
-                <div class="absolute inset-0 bg-gradient-to-t from-navy-900/90 via-navy-900/20 to-transparent"></div>
+                <div class="absolute inset-0 bg-gradient-to-t from-navy-900 via-navy-900/20 to-transparent"></div>
                 
-                <div class="absolute top-6 right-6">
-                   <div class="badge-urgency px-3 py-1.5 shadow-xl">{{ tour.viewingCount }} viewing</div>
+                <div class="absolute top-8 right-8">
+                   <div class="bg-accent/90 backdrop-blur-md text-navy-900 text-[10px] font-black uppercase tracking-widest px-4 py-2 rounded-2xl shadow-xl transition-all group-hover:bg-accent group-hover:scale-110">{{ tour.viewingCount }} viewing</div>
                 </div>
 
                 <div class="absolute bottom-10 left-10 right-10">
                    <div class="flex items-center gap-2 mb-4">
-                     <span class="bg-teal-600 text-white px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest">{{ tour.style }}</span>
-                     <span class="text-teal-400 font-black text-[10px] uppercase tracking-widest">$ {{ tour.price }}</span>
+                     <span class="bg-accent text-navy-900 px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest">{{ tour.style }}</span>
+                     <span class="text-accent font-black text-[10px] uppercase tracking-widest">$ {{ tour.price }}</span>
                    </div>
-                   <h3 class="text-3xl font-black text-white tracking-tighter leading-tight mb-6">{{ tour.title }}</h3>
-                   <button class="bg-white text-navy-900 font-black text-[10px] px-6 py-3 rounded-xl hover:bg-teal-600 hover:text-white transition-all uppercase tracking-widest shadow-xl opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500">Explore Now</button>
+                   <h3 class="text-3xl font-black text-white tracking-tighter leading-tight mb-8">{{ tour.title }}</h3>
+                   <button class="bg-white text-navy-900 font-extrabold text-[10px] px-8 py-4 rounded-2xl hover:bg-accent transition-all uppercase tracking-widest shadow-2xl opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500">Explore Experience</button>
                 </div>
               </div>
             }
