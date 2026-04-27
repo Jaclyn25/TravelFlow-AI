@@ -4,11 +4,12 @@ import { TourService, Tour } from '../../core/services/tour.service';
 import { WhatsAppService } from '../../core/services/whatsapp.service';
 import { UrgencyBadgeComponent } from '../../shared/components/urgency-badge/urgency-badge';
 import { CountdownTimerComponent } from '../../shared/components/countdown-timer/countdown-timer';
+import { SkeletonLoaderComponent } from '../../shared/components/skeleton-loader/skeleton-loader';
 
 @Component({
   selector: 'app-tour-details',
   standalone: true,
-  imports: [CommonModule, UrgencyBadgeComponent, CountdownTimerComponent],
+  imports: [CommonModule, UrgencyBadgeComponent, CountdownTimerComponent, SkeletonLoaderComponent],
   templateUrl: './tour-details.html',
 })
 export class TourDetailsComponent {
@@ -19,6 +20,7 @@ export class TourDetailsComponent {
   whatsappService = inject(WhatsAppService);
 
   tour = signal<Tour | undefined>(undefined);
+  isLoading = signal(true);
   expandedDay = signal<number | null>(1);
 
   constructor() {
@@ -26,10 +28,16 @@ export class TourDetailsComponent {
     effect(() => {
       const id = this.tourId();
       if (id) {
+        this.isLoading.set(true);
         const foundTour = this.tourService.getTourById(id)();
         this.tour.set(foundTour);
+        setTimeout(() => this.isLoading.set(false), 1500);
       }
     });
+  }
+
+  printItinerary() {
+    window.print();
   }
 
   /**
