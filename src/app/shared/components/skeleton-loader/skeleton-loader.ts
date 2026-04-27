@@ -16,12 +16,12 @@ import { CommonModule } from '@angular/common';
     .animate-pulse {
       background: linear-gradient(
         90deg,
-        rgba(226, 232, 240, 1) 0%,
-        rgba(241, 245, 249, 1) 50%,
-        rgba(226, 232, 240, 1) 100%
+        rgba(30, 41, 59, 0.5) 0%,
+        rgba(222, 255, 154, 0.05) 50%,
+        rgba(30, 41, 59, 0.5) 100%
       );
       background-size: 200% 100%;
-      animation: shimmer 1.5s infinite linear;
+      animation: shimmer 2s infinite linear;
     }
     @keyframes shimmer {
       0% { background-position: 200% 0; }
