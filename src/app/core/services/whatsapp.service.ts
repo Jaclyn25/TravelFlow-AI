@@ -1,16 +1,13 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, signal, inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 
 @Injectable({
   providedIn: 'root'
 })
 export class WhatsAppService {
-  private readonly phoneNumber = signal<string>('+201234567890'); // Agency Phone
+  private readonly platformId = inject(PLATFORM_ID);
+  private readonly phoneNumber = signal<string>('201234567890'); // Agency Phone (Digits Only)
 
-  /**
-   * Generates a dynamic WhatsApp deep link for a specific tour.
-   * @param tourName The name of the tour.
-   * @param price The tour price.
-   */
   /**
    * Generates a complex link for the Live Trip Builder.
    */
@@ -22,12 +19,20 @@ export class WhatsAppService {
 - Vibe: ${details.vibe}
 
 Can we finalize the itinerary?`;
-    return `https://wa.me/${this.phoneNumber()}?text=${encodeURIComponent(message)}`;
+    return this.generateLink(message);
   }
 
   sendGeneralInquiry(message: string) {
-    const url = `https://wa.me/${this.phoneNumber()}?text=${encodeURIComponent(message)}`;
-    window.open(url, '_blank');
+    if (isPlatformBrowser(this.platformId)) {
+      const url = this.generateLink(message);
+      window.open(url, '_blank');
+    }
+  }
+
+  generateLink(message: string): string {
+    const cleanPhone = this.phoneNumber().replace(/\D/g, ''); // Ensure digits only
+    const encodedMsg = encodeURIComponent(message);
+    return `https://wa.me/${cleanPhone}?text=${encodedMsg}`;
   }
 
   updatePhoneNumber(newNumber: string) {

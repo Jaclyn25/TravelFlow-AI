@@ -1,7 +1,7 @@
 import { Component, inject, signal, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
-import { TourService, Tour } from '../../../../core/services/tour.service';
+import { TravelDataService, Tour } from '../../../../core/services/travel-data.service';
 import { WhatsAppService } from '../../../../core/services/whatsapp.service';
 
 @Component({
@@ -29,16 +29,16 @@ import { WhatsAppService } from '../../../../core/services/whatsapp.service';
                <div class="animate-fade-in-up">
                  <h3 class="text-3xl font-black text-navy-900 dark:text-white font-serif mb-12 tracking-tighter">Where should we <br><span class="text-accent italic font-light">begin?</span></h3>
                  <div class="grid grid-cols-2 gap-4">
-                   @for (d of destinations; track d) {
-                     <button (click)="selectDestination(d)" 
-                             [class]="'py-6 px-6 rounded-3xl text-xs font-black uppercase tracking-wider border-2 transition-all ' + (selection().destination === d ? 'border-accent bg-accent/5 text-accent' : 'border-slate-50 bg-slate-50/50 text-slate-500 hover:border-accent/20 dark:border-white/5 dark:bg-white/5')">
-                       {{ d }}
+                   @for (d of dataService.destinations(); track d.id) {
+                     <button (click)="selectDestination(d.name)" 
+                             [class]="'py-6 px-6 rounded-3xl text-xs font-black uppercase tracking-wider border-2 transition-all ' + (selection().destination === d.name ? 'border-accent bg-accent/5 text-accent' : 'border-slate-50 bg-slate-50/50 text-slate-500 hover:border-accent/20 dark:border-white/5 dark:bg-white/5')">
+                       {{ d.name }}
                      </button>
                    }
                  </div>
                </div>
              }
-
+             <!-- ... other steps ... -->
              @if (currentStep() === 2) {
                <div class="animate-fade-in-up">
                  <h3 class="text-3xl font-black text-navy-900 dark:text-white font-serif mb-12 tracking-tighter">How long is the <br><span class="text-accent italic font-light">escape?</span></h3>
@@ -111,6 +111,7 @@ import { WhatsAppService } from '../../../../core/services/whatsapp.service';
                    <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Destination</span>
                    <span class="text-navy-900 dark:text-white font-black text-sm uppercase tracking-widest italic">{{ selection().destination }}</span>
                 </div>
+                <!-- ... other items ... -->
                 <div class="flex items-center justify-between p-6 glass rounded-2xl border-white/10">
                    <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Duration</span>
                    <span class="text-navy-900 dark:text-white font-black text-sm uppercase tracking-widest italic">{{ selection().duration }} Days</span>
@@ -138,7 +139,7 @@ import { WhatsAppService } from '../../../../core/services/whatsapp.service';
   `]
 })
 export class SmartTripFinderComponent {
-  private tourService = inject(TourService);
+  dataService = inject(TravelDataService);
   private whatsapp = inject(WhatsAppService);
 
   currentStep = signal(1);
@@ -150,7 +151,6 @@ export class SmartTripFinderComponent {
   });
 
   stepTitles = ['Destination Selection', 'Time Horizon', 'Investment Level', 'Soul Alignment'];
-  destinations = ['Bali', 'Morocco', 'Greece', 'Japan', 'Iceland', 'Italy'];
   durations = ['3-5', '7-10', '14+', '21+'];
   budgets = [
     { value: 'Bespoke', label: 'Bespoke Premium', desc: 'Curated luxury for the discerning' },
@@ -170,9 +170,9 @@ export class SmartTripFinderComponent {
     effect(() => {
       if (this.currentStep() === 5) {
         const s = this.selection();
-        const tours = this.tourService.allTours();
+        const tours = this.dataService.tours();
         // Matching logic simplified for SaaS demo
-        const match = tours.find(t => t.destination.toLowerCase().includes(s.destination.toLowerCase())) || tours[0];
+        const match = tours.find(t => t.title.toLowerCase().includes(s.destination.toLowerCase())) || tours[0];
         this.recommendedTour.set(match);
       }
     });
