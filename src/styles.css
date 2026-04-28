@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+/* Fonts managed in index.html */
 
 @tailwind base;
 @tailwind components;
@@ -6,7 +6,7 @@
 
 /* Global Base Styles */
 body {
-  @apply bg-slate-50 text-slate-900 transition-colors duration-500 font-sans;
+  @apply bg-slate-50 text-slate-900 transition-colors duration-500 font-sans tracking-tight;
 }
 
 body.dark {
@@ -38,8 +38,8 @@ body.dark {
   }
 
   .btn-primary {
-    @apply bg-teal-600 hover:bg-teal-700 text-white font-semibold py-3 px-6 rounded-2xl transition-all duration-300 transform active:scale-95 shadow-lg shadow-teal-100 flex items-center justify-center gap-2;
-    @apply dark:shadow-teal-900/20;
+    @apply bg-accent hover:bg-accent/90 text-navy-900 font-black py-4 px-10 rounded-2xl transition-all duration-500 transform active:scale-95 shadow-2xl flex items-center justify-center gap-3 uppercase tracking-widest text-[11px];
+    @apply shadow-accent/20;
   }
 
   .btn-accent {

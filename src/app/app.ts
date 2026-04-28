@@ -1,14 +1,40 @@
-import { Component } from '@angular/core';
-import { RouterOutlet, RouterLink } from '@angular/router';
+import { Component, inject } from '@angular/core';
+import { RouterOutlet, RouterLink, ChildrenOutletContexts } from '@angular/router';
+import { trigger, transition, style, query, animate } from '@angular/animations';
 import { FloatingWhatsappBtnComponent } from './shared/components/floating-whatsapp/floating-whatsapp';
 import { ToastContainerComponent } from './shared/components/toast/toast';
-import { DarkModeService } from './core/services/dark-mode.service';
-import { inject } from '@angular/core';
+import { BreadcrumbsComponent } from './shared/components/breadcrumbs/breadcrumbs';
+import { ThemeService } from './core/services/theme.service';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, RouterLink, FloatingWhatsappBtnComponent, ToastContainerComponent],
+  imports: [RouterOutlet, RouterLink, FloatingWhatsappBtnComponent, ToastContainerComponent, BreadcrumbsComponent],
+  animations: [
+    trigger('routeAnimations', [
+      transition('* <=> *', [
+        style({ position: 'relative' }),
+        query(':enter, :leave', [
+          style({
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            opacity: 0
+          })
+        ], { optional: true }),
+        query(':enter', [
+          style({ opacity: 0, transform: 'translateY(10px)' })
+        ], { optional: true }),
+        query(':leave', [
+          animate('0.3s ease-out', style({ opacity: 0 }))
+        ], { optional: true }),
+        query(':enter', [
+          animate('0.5s ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
+        ], { optional: true })
+      ])
+    ])
+  ],
   template: `
     <!-- Sticky Glass Navbar -->
     <nav class="fixed top-0 left-0 w-full z-50 glass border-b border-white/20 px-6 py-4 transition-all duration-300">
@@ -27,8 +53,8 @@ import { inject } from '@angular/core';
           <a routerLink="/about" class="text-[10px] font-black text-slate-600 hover:text-accent transition-colors uppercase tracking-widest dark:text-slate-400">About</a>
           
           <!-- Dark Mode Toggle -->
-          <button (click)="darkModeService.toggle()" class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-accent hover:scale-110 transition-transform">
-            @if (darkModeService.darkMode()) {
+          <button (click)="theme.toggleTheme()" class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-accent hover:scale-110 transition-transform">
+            @if (theme.isDarkMode()) {
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 9h-1m15.364-6.364l-.707.707M6.343 17.657l-.707.707m12.728 0l-.707-.707M6.343 6.343l-.707-.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
             } @else {
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
@@ -40,8 +66,11 @@ import { inject } from '@angular/core';
       </div>
     </nav>
 
-    <main class="min-h-screen dark:bg-navy-900 transition-colors duration-500">
-      <router-outlet></router-outlet>
+    <main class="min-h-screen dark:bg-navy-900 transition-colors duration-500 pb-20" [@routeAnimations]="getRouteAnimationData()">
+      <div class="pt-32 max-w-7xl mx-auto px-6">
+        <app-breadcrumbs></app-breadcrumbs>
+        <router-outlet></router-outlet>
+      </div>
     </main>
 
     <app-floating-whatsapp></app-floating-whatsapp>
@@ -96,5 +125,10 @@ import { inject } from '@angular/core';
   `
 })
 export class App {
-  darkModeService = inject(DarkModeService);
+  theme = inject(ThemeService);
+  private contexts = inject(ChildrenOutletContexts);
+
+  getRouteAnimationData() {
+    return (this.contexts.getContext('primary') as any)?.route?.snapshot?.data?.['animation'];
+  }
 }
