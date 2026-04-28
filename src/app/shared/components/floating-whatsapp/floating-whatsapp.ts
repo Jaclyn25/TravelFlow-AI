@@ -26,6 +26,6 @@ export class FloatingWhatsappBtnComponent {
   private whatsappService = inject(WhatsAppService);
 
   whatsappLink() {
-    return this.whatsappService.generateLink('Travel Planning Inquiry', 0);
+    return this.whatsappService.generateLink('Travel Planning Inquiry');
   }
 }

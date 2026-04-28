@@ -29,9 +29,10 @@ Can we finalize the itinerary?`;
     }
   }
 
-  generateLink(message: string): string {
+  generateLink(message: string, price?: number): string {
     const cleanPhone = this.phoneNumber().replace(/\D/g, ''); // Ensure digits only
-    const encodedMsg = encodeURIComponent(message);
+    const finalMessage = price !== undefined ? `${message} - Price: $${price}` : message;
+    const encodedMsg = encodeURIComponent(finalMessage);
     return `https://wa.me/${cleanPhone}?text=${encodedMsg}`;
   }
 
